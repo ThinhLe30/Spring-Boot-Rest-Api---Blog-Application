@@ -9,5 +9,6 @@ public class SpringBootRestApiBlogApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootRestApiBlogApplication.class, args);
 	}
+	
 
 }
