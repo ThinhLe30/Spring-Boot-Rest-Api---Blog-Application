@@ -1,9 +1,12 @@
 package com.brooklyn.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +21,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 	
+	@Autowired
+	private UserDetailsService detailsService;
+	
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+		return configuration.getAuthenticationManager();
+	}
+	
 	@Bean
 	public static PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -28,22 +39,22 @@ public class SecurityConfig {
 		http.csrf().disable()
 			.authorizeHttpRequests((authorize)-> 
 					authorize.requestMatchers(HttpMethod.GET,"/**").permitAll()
-						.anyRequest().authenticated())
-			.httpBasic(Customizer.withDefaults());
+						     .requestMatchers("/auth/**").permitAll()
+						.anyRequest().authenticated());
 		return http.build();
 	}
 	
-	@Bean
-	public UserDetailsService userDetailsService() {
-		UserDetails brooklyn = User.builder()
-				.username("brooklyn")
-				.password(passwordEncoder().encode("brooklyn"))
-				.roles("USER").build();
-		UserDetails admin = User.builder()
-				.username("admin")
-				.password(passwordEncoder().encode("admin"))
-				.roles("ADMIN").build();
-		return new InMemoryUserDetailsManager(brooklyn, admin);
-	}
+//	@Bean
+//	public UserDetailsService userDetailsService() {
+//		UserDetails brooklyn = User.builder()
+//				.username("brooklyn")
+//				.password(passwordEncoder().encode("brooklyn"))
+//				.roles("USER").build();
+//		UserDetails admin = User.builder()
+//				.username("admin")
+//				.password(passwordEncoder().encode("admin"))
+//				.roles("ADMIN").build();
+//		return new InMemoryUserDetailsManager(brooklyn, admin);
+//	}
 	
 }
