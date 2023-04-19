@@ -16,13 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.brooklyn.payload.CommentDTO;
 import com.brooklyn.service.CommentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class CommentController {
 	@Autowired
 	private CommentService commentService;
 	@PostMapping("/posts/{postId}/comments")
 	public ResponseEntity<CommentDTO> createComment(@PathVariable(name = "postId") Integer postId,
-													@RequestBody CommentDTO commentDTO){
+													@Valid @RequestBody CommentDTO commentDTO){
 		return new ResponseEntity<CommentDTO>(commentService.createComment(commentDTO,postId), HttpStatus.CREATED);
 	}
 	@GetMapping("/posts/{postId}/comments")
@@ -36,9 +38,9 @@ public class CommentController {
 	}
 	
 	@PutMapping("/posts/{postId}/comments/{commentId}")
-	public ResponseEntity<CommentDTO> createComment(@PathVariable(name = "postId") Integer postId,
+	public ResponseEntity<CommentDTO> updateComment(@PathVariable(name = "postId") Integer postId,
 			@PathVariable(name = "commentId") Integer commentId,
-			@RequestBody CommentDTO commentDTO){
+			@Valid @RequestBody CommentDTO commentDTO){
 		return new ResponseEntity<CommentDTO>(commentService.updateComment(postId, commentId, commentDTO), HttpStatus.OK); 
 	}
 	@DeleteMapping("/posts/{postId}/comments/{commentId}")
