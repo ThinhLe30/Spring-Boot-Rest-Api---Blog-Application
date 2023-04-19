@@ -46,6 +46,28 @@ public class CommentService {
 		if(!commentInDb.getPost().getId().equals(postInDB.getId())){
 			throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment does not belong to post.");
 		}
+		
 		return mapToCommentDTO(commentInDb);
 	}
+	public CommentDTO updateComment(Integer postId, Integer commentId, CommentDTO commentDTO) {
+		Post postInDB = postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post", "id", String.valueOf(postId)));
+		Comment commentInDb = commentRepository.findById(commentId).orElseThrow(()-> new ResourceNotFoundException("Comment", "id", String.valueOf(commentId)));
+		if(!commentInDb.getPost().getId().equals(postInDB.getId())){
+			throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment does not belong to post.");
+		}
+		commentInDb.setBody(commentDTO.getBody());
+		commentInDb.setEmail(commentDTO.getEmail());
+		commentInDb.setName(commentDTO.getName());
+		Comment savedComment = commentRepository.save(commentInDb);
+		return mapToCommentDTO(savedComment);
+	}
+	public void deleteComment(Integer postId, Integer commentId) {
+		Post postInDB = postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post", "id", String.valueOf(postId)));
+		Comment commentInDb = commentRepository.findById(commentId).orElseThrow(()-> new ResourceNotFoundException("Comment", "id", String.valueOf(commentId)));
+		if(!commentInDb.getPost().getId().equals(postInDB.getId())){
+			throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment does not belong to post.");
+		}
+		commentRepository.delete(commentInDb);
+	}
+	
 }

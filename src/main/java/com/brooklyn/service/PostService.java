@@ -3,6 +3,7 @@ package com.brooklyn.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +21,8 @@ import com.brooklyn.repository.PostRepository;
 public class PostService {
 	@Autowired
 	private PostRepository postRepository;
-	
+	@Autowired
+	private ModelMapper modelMapper;
 	private PostDTO mapToDTO(Post postSaved) {
 		return new PostDTO(postSaved.getId(),postSaved.getTitle(), postSaved.getDescription(), postSaved.getContent());
 	}
