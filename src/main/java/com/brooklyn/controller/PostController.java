@@ -18,6 +18,8 @@ import com.brooklyn.payload.PostResponse;
 import com.brooklyn.service.PostService;
 import com.brooklyn.utils.AppConstant;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/posts")
 public class PostController {
@@ -38,11 +40,11 @@ public class PostController {
 		return new ResponseEntity<PostDTO>(postService.get(id), HttpStatus.OK);
 	}
 	@PostMapping
-	public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO post) {
+	public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO post) {
 		return new ResponseEntity<PostDTO>(postService.createPost(post), HttpStatus.CREATED);
 	}
 	@PutMapping("/{id}")
-	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO post,@PathVariable(name = "id") Integer id){
+	public ResponseEntity<PostDTO> updatePost(@Valid @RequestBody PostDTO post,@PathVariable(name = "id") Integer id){
 		return new ResponseEntity<PostDTO>(postService.updatePost(post,id), HttpStatus.OK);
 	}
 	@DeleteMapping("/{id}")
