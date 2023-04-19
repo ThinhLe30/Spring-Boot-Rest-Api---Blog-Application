@@ -19,6 +19,7 @@ import com.brooklyn.payload.LoginDTO;
 import com.brooklyn.payload.RegisterDTO;
 import com.brooklyn.repository.RoleRepository;
 import com.brooklyn.repository.UserRepository;
+import com.brooklyn.security.JwtTokenProvider;
 
 @Service
 public class AuthService {
@@ -31,14 +32,16 @@ public class AuthService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private PasswordEncoder encoder;
-	
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
 	
 	public String login(LoginDTO dto) {
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 				dto.getUsernameOrEmail(),
 				dto.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		return "User Logged-in successfully!.";
+		String token = jwtTokenProvider.generateToken(authentication);
+		return token;
 	}
 	public String register(RegisterDTO registerDTO) {
 		if(repository.existsByUsername(registerDTO.getUsername())) {
