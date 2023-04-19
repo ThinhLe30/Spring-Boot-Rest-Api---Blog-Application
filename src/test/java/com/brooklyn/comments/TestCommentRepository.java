@@ -1,6 +1,6 @@
-package com.brooklyn.posts;
+package com.brooklyn.comments;
 
-import java.util.UUID;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -11,24 +11,29 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
 import com.brooklyn.entity.Comment;
-import com.brooklyn.entity.Post;
+import com.brooklyn.repository.CommentRepository;
 import com.brooklyn.repository.PostRepository;
 import com.github.javafaker.Faker;
-import java.util.Random;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Rollback(false)
-public class TestPostRepository {
+public class TestCommentRepository {
+	@Autowired
+	private CommentRepository commentRepository;
 	@Autowired
 	private PostRepository postRepository;
-	
 	@Test
-	public void testFakeDataToDB() {
+	public void testFakeDataCommment() {
 		Faker faker = new Faker();
+		Random random = new Random();
 		IntStream.range(0, 50).forEach(i -> {
-			postRepository.save(new Post(faker.book().title() + " " + UUID.randomUUID().toString(),
-					faker.lorem().sentence(),
-					faker.lorem().paragraph()));
+			Comment comment = new Comment();
+			comment.setName(faker.name().fullName());
+			comment.setEmail(faker.internet().emailAddress());
+			comment.setBody(faker.lorem().sentence(10));
+			comment.setPost(postRepository.findById(random.nextInt(50) + 31).get());
+			commentRepository.save(comment);
 		});
 	}
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.brooklyn.payload.PostDTO;
 import com.brooklyn.payload.PostResponse;
 import com.brooklyn.service.PostService;
+import com.brooklyn.utils.AppConstant;
 
 @RestController
 @RequestMapping("/posts")
@@ -25,10 +26,10 @@ public class PostController {
 	private PostService postService;
 	@GetMapping
 	public PostResponse findAll(
-			@RequestParam(value = "pageNo", defaultValue = "0",required = false) int pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "10",required = false) int pageSize,
-			@RequestParam(value = "sortField", defaultValue = "id",required = false) String sortField,
-			@RequestParam(value = "orderBy", defaultValue = "asc",required = false) String orderBy
+			@RequestParam(value = "pageNo", defaultValue = AppConstant.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
+			@RequestParam(value = "pageSize", defaultValue = AppConstant.DEFAULT_PAGE_SIZE,required = false) int pageSize,
+			@RequestParam(value = "sortField", defaultValue = AppConstant.DEFAULT_SORT_FIELD,required = false) String sortField,
+			@RequestParam(value = "orderBy", defaultValue = AppConstant.DEFAULT_ORDER_BY,required = false) String orderBy
 			){
 		return postService.findAll(pageNo, pageSize, sortField, orderBy);
 	}
