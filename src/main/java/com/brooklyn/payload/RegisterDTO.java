@@ -1,7 +1,6 @@
 package com.brooklyn.payload;
 
-import org.springframework.scheduling.support.SimpleTriggerContext;
-
+ 
 public class RegisterDTO {
 	private String name;
 	private String username;
