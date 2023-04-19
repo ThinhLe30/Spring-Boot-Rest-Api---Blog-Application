@@ -1,11 +1,13 @@
 package com.brooklyn.payload;
 
+import java.util.Set;
 
 public class PostDTO {
 	private Integer id;
 	private String title;
 	private String description;
 	private String content;
+	private Set<CommentDTO> comments;
 	public Integer getId() {
 		return id;
 	}
@@ -45,5 +47,15 @@ public class PostDTO {
 	}
 	public PostDTO() {
 	}
+	public Set<CommentDTO> getComments() {
+		return comments;
+	}
+	public void setComments(Set<CommentDTO> comments) {
+		this.comments = comments;
+	}
+
+	
+
+	
 	
 }

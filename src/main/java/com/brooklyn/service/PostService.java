@@ -24,10 +24,12 @@ public class PostService {
 	@Autowired
 	private ModelMapper modelMapper;
 	private PostDTO mapToDTO(Post postSaved) {
-		return new PostDTO(postSaved.getId(),postSaved.getTitle(), postSaved.getDescription(), postSaved.getContent());
+//		return new PostDTO(postSaved.getId(),postSaved.getTitle(), postSaved.getDescription(), postSaved.getContent());
+		return modelMapper.map(postSaved, PostDTO.class);
 	}
 	private Post mapToPost(PostDTO postDTO) {
-		return new Post(postDTO.getTitle(), postDTO.getDescription(), postDTO.getContent());
+//		return new Post(postDTO.getTitle(), postDTO.getDescription(), postDTO.getContent());
+		return modelMapper.map(postDTO, Post.class);
 	}
 	public PostResponse findAll(int pageNo, int pageSize, String sortField, String orderBy){
 		Sort sort = orderBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();

@@ -1,10 +1,9 @@
 package com.brooklyn.service;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,11 +22,15 @@ public class CommentService {
 	private CommentRepository commentRepository;
 	@Autowired
 	private PostRepository postRepository;
+	@Autowired
+	private ModelMapper modelMapper;
 	private CommentDTO mapToCommentDTO(Comment comment) {
-		return new CommentDTO(comment.getId(), comment.getName(), comment.getEmail(), comment.getBody());
+//		return new CommentDTO(comment.getId(), comment.getName(), comment.getEmail(), comment.getBody());
+		return modelMapper.map(comment, CommentDTO.class);
 	}
 	private Comment mapToComment(CommentDTO commentDTO) {
-		return new Comment(commentDTO.getId(),commentDTO.getName(), commentDTO.getEmail(), commentDTO.getBody());
+//		return new Comment(commentDTO.getId(),commentDTO.getName(), commentDTO.getEmail(), commentDTO.getBody());
+		return modelMapper.map(commentDTO, Comment.class);
 	}
 	public CommentDTO createComment(CommentDTO commentDTO, Integer postId) {
 		Comment comment = mapToComment(commentDTO);

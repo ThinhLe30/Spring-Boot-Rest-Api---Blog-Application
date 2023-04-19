@@ -27,7 +27,7 @@ public class Post {
 	private String content;
 	
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Comment> setComments = new HashSet<>();
+	private Set<Comment> comments = new HashSet<>();
 	public Integer getId() {
 		return id;
 	}
@@ -59,12 +59,13 @@ public class Post {
 		this.description = description;
 		this.content = content;
 	}
-	public Set<Comment> getSetComments() {
-		return setComments;
+	public Set<Comment> getComments() {
+		return comments;
 	}
-	public void setSetComments(Set<Comment> setComments) {
-		this.setComments = setComments;
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
 	}
+
 	
 	
 	
