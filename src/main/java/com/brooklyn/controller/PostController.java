@@ -19,14 +19,29 @@ import com.brooklyn.payload.PostResponse;
 import com.brooklyn.service.PostService;
 import com.brooklyn.utils.AppConstant;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/posts")
+@Tag(name = "CRUD REST APIs for POST Resource")
 public class PostController {
 	
 	@Autowired
 	private PostService postService;
+	
+	
+	@Operation(
+			description = "Get all Posts REST API is used to get all posts in database",
+			summary = "Get All Posts Rest API"
+			)
+	@ApiResponse(
+			responseCode = "200",
+			description = "Http Status 200 OK"
+			)
 	@GetMapping
 	public PostResponse findAll(
 			@RequestParam(value = "pageNo", defaultValue = AppConstant.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
@@ -36,20 +51,68 @@ public class PostController {
 			){
 		return postService.findAll(pageNo, pageSize, sortField, orderBy);
 	}
+	
+	@Operation(
+			description = "Get Post By id REST API is used to get Post by id in database",
+			summary = "Get Post By id Rest API"
+			)
+	@ApiResponse(
+			responseCode = "200",
+			description = "Http Status 200 OK"
+			)
 	@GetMapping("/{id}")
 	public ResponseEntity<PostDTO> getPost(@PathVariable(name = "id") Integer id) {
 		return new ResponseEntity<PostDTO>(postService.get(id), HttpStatus.OK);
 	}
+	
+	
+	@Operation(
+			description = "Create Post REST API is used to save post into database",
+			summary = "Create Post Rest API"
+			)
+	@ApiResponse(
+			responseCode = "201",
+			description = "Http Status 201 CREATED"
+			)
+	@SecurityRequirement(
+			name = "Bearer Authentication"
+			)
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO post) {
 		return new ResponseEntity<PostDTO>(postService.createPost(post), HttpStatus.CREATED);
 	}
+	
+	
+	@Operation(
+			description = "Update Post REST API is used to update post and save into database",
+			summary = "Update Post Rest API"
+			)
+	@ApiResponse(
+			responseCode = "200",
+			description = "Http Status 200 OK"
+			)
+	@SecurityRequirement(
+			name = "Bearer Authentication"
+			)
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<PostDTO> updatePost(@Valid @RequestBody PostDTO post,@PathVariable(name = "id") Integer id){
 		return new ResponseEntity<PostDTO>(postService.updatePost(post,id), HttpStatus.OK);
 	}
+	
+	
+	@Operation(
+			description = "Delete Post REST API is used to delete post out of database",
+			summary = "Delete Post Rest API"
+			)
+	@ApiResponse(
+			responseCode = "200",
+			description = "Http Status 200 OK"
+			)
+	@SecurityRequirement(
+			name = "Bearer Authentication"
+			)
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deletePost(@PathVariable(name = "id") Integer id) {
