@@ -71,6 +71,13 @@ public class Post {
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	
 
 	
 	
