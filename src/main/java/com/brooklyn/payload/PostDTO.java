@@ -22,6 +22,8 @@ public class PostDTO {
 	private Set<CommentDTO> comments;
 	
 	
+	private Integer categoryId;
+	
 	
 	public Integer getId() {
 		return id;
@@ -68,9 +70,13 @@ public class PostDTO {
 	public void setComments(Set<CommentDTO> comments) {
 		this.comments = comments;
 	}
-
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
 	
-
 	
 	
 }
